@@ -1,9 +1,10 @@
 {
   "devDependencies": {
-    "aws-sdk": "^2.879.0",
+    "aws-sdk": "^2.882.0",
     "serverless-bundle": "^4.2.2"
   },
   "dependencies": {
+    "aws-amplify-serverless-plugin": "^1.4.1",
     "uuid": "^7.0.3"
   }
 }

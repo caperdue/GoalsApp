@@ -11,7 +11,8 @@ export async function main(event, context) {
             userId: "123",
             goalId: uuid.v1(),
             goalName: data.goalName,
-            goalAchieveBy: data.achieveBy
+            goalAchieveBy: data.achieveBy,
+            completed: data.completed
         }
     };
     try {

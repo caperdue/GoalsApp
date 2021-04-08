@@ -19,6 +19,10 @@ export async function main(event, context) {
             statusCode: 200,
             //return the items as the response
             body: JSON.stringify(data.Items),
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
         };
     }
     catch (e) {

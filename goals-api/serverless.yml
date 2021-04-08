@@ -16,15 +16,16 @@ service: goals-api
 app: goals-app
 org: cperdue
 
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
-frameworkVersion: '2'
-
 package: 
   individually: true
 
 plugins:
   - serverless-bundle # Package our functions with Webpack
+
+# Create our resources with separate CloudFormation templates
+resources:
+  # API Gateway Errors
+  - ${file(resources/api-gateway-errors.yml)}
 
 provider:
   name: aws
@@ -49,6 +50,7 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
         - dynamodb:DescribeTable
+        - s3:GetObject
       Resource: "arn:aws:dynamodb:us-east-2:*:*"
 
 
@@ -57,23 +59,23 @@ functions:
     handler: create.main
     events:
       - http:
-          path: /
+          path: goals
           method: post
+          cors: true
+          authorizer: aws_iam
   list:
     handler: list.main
     events:
       - http:
-          path: /
+          path: goals
           method: get
-
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+          cors: true
+          authorizer: aws_iam
+  delete:
+    handler: delete.main
+    events:
+      - http:
+          path: goals
+          method: delete
+          cors: true
+          authorizer: aws_iam
