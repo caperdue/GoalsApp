@@ -5,52 +5,56 @@ import './MyGoals.css';
 import { useAppContext } from '../index.js'
 import { Auth, API } from 'aws-amplify';
 import CreateGoal from './CreateGoal.js';
+import { Modal, Row, Col, Grid, Container, Button} from "react-bootstrap";
 
 export default function MyGoals() {
     const { isAuthenticated } = useAppContext();
     const [goals, setGoals] = useState([]);
-    const [createMode, setCreateMode] = useState(false);
+    const [show, showModal] = useState(false);
 
-    //Load notes when component first loads
+    //Load notes  when component first loads
     useEffect(() => {
         async function loadGoals() {
             let goals = await API.get("goals", "/goals");
             setGoals(goals);
         }
         loadGoals();
-        console.log(isAuthenticated)
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
 
-    function handleClick() {
-        setCreateMode(true);
+    function handleCreate() {
+        showModal(true);
     }
 
-    function renderCreate() {
-        if (createMode) {
-            return <CreateGoal />
-        }
+    async function closeModal() {
+        showModal(false);
     }
-
 
     return (
-        <div className="mt-2 container goalsList">
-            <div className="row">
+        <Container>
+            <Modal size="lg" show={show}>
+                <Modal.Header>
+                    <Modal.Title>Create New Goal</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <CreateGoal handleCancel={closeModal} closeModal={closeModal} />
+                </Modal.Body>
+            </Modal>
+            <Row>
                 <h1 className="p-2 col-md-9">My Goals</h1>
-            </div>
-            <div className="row">
-                <div className="col-md-12">
-                    <button onClick={handleClick} type="button" className="addGoalBtn btn btn-info">Add Goal</button>
-                </div>
-            </div>
-            <div className="row">
-                <div className="col-md-12">
+            </Row>
+            <Row>
+                <Col md={12}>
+                    <Button onClick={handleCreate} type="button" className="addGoalBtn btn btn-info">Add Goal</Button>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={12}>
                     {goals.map((goal) => {
-                       return <GoalItem goalName={goal.goalName} date={goal.dateAchieveBy} key={goal.goalId} />
+                        return <GoalItem goalName={goal.goalName} date={goal.goalAchieveBy} key={goal.goalId} />
                     })}
-                </div>
-            </div>
-            {renderCreate()}
-        </div>
+                </Col>
+            </Row>
+        </Container>
     )
 
 

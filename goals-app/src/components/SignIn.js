@@ -48,7 +48,7 @@ function SignIn() {
                     email: email,
                 }
             })
-            let code = prompt("Please enter your verification code sent to email.")
+            let code = prompt("Please enter your verification code sent to email.");
             await Auth.confirmSignUp(email, code);
             userHasAuthenticated(true);
             history.push("/goals");

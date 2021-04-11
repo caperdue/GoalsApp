@@ -4,11 +4,11 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 export async function main(event, context) {
     const data = JSON.parse(event.body);
-
+//TODO - handle delete 
     const params = {
         TableName: "userGoals",
         Key: {
-            userId: data.userId,
+            userId: event.requestContext.identity.cognitoIdentityId,
             goalId: data.goalId,
         },
     };

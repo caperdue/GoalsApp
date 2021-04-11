@@ -9,7 +9,7 @@ export async function main(event, context) {
         KeyConditionExpression: "userId = :userId",
         //Define the attribute value
         ExpressionAttributeValues: {
-            ":userId" : "123",
+            ":userId" : event.requestContext.identity.cognitoIdentityId,
         }
     };
 

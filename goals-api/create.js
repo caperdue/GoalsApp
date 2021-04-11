@@ -8,11 +8,12 @@ export async function main(event, context) {
     const params = {
         TableName: "userGoals",
         Item: {
-            userId: "123",
+            userId: event.requestContext.identity.cognitoIdentityId,
             goalId: uuid.v1(),
             goalName: data.goalName,
             goalAchieveBy: data.achieveBy,
-            completed: data.completed
+            completed: data.completed,
+            notes: data.notes
         }
     };
     try {
